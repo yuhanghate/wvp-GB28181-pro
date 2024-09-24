@@ -75,7 +75,7 @@ sip:
 media:
   id: zlmediakit33021103
   # [必须修改] zlm服务器的内网IP
-  ip: 172.17.20.12
+  ip: 192.168.10.190
   # [可选] 有公网IP就配置公网IP, 不可用域名
   wan_ip:
   # [必须修改] zlm服务器的http.port
