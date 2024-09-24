@@ -1,6 +1,7 @@
 /*建表*/
+DROP TABLE IF EXISTS wvp_device;
 create table wvp_device (
-                            id serial primary key ,
+                            id BIGINT AUTO_INCREMENT PRIMARY KEY,
                             device_id character varying(50) not null ,
                             name character varying(255),
                             manufacturer character varying(255),
@@ -35,8 +36,9 @@ create table wvp_device (
                             constraint uk_device_device unique (device_id)
 );
 
+DROP TABLE IF EXISTS wvp_device_alarm;
 create table wvp_device_alarm (
-                                  id serial primary key ,
+                                  id BIGINT AUTO_INCREMENT PRIMARY KEY,
                                   device_id character varying(50) not null,
                                   channel_id character varying(50) not null,
                                   alarm_priority character varying(50),
@@ -49,8 +51,9 @@ create table wvp_device_alarm (
                                   create_time character varying(50) not null
 );
 
+DROP TABLE IF EXISTS wvp_device_channel;
 create table wvp_device_channel (
-                                    id serial primary key ,
+                                    id BIGINT AUTO_INCREMENT PRIMARY KEY,
                                     channel_id character varying(50) not null,
                                     name character varying(255),
                                     custom_name character varying(255),
@@ -95,8 +98,9 @@ create table wvp_device_channel (
                                     constraint uk_wvp_device_channel_unique_device_channel unique (device_id, channel_id)
 );
 
+DROP TABLE IF EXISTS wvp_device_mobile_position;
 create table wvp_device_mobile_position (
-                                            id serial primary key,
+                                            id BIGINT AUTO_INCREMENT PRIMARY KEY,
                                             device_id character varying(50) not null,
                                             channel_id character varying(50) not null,
                                             device_name character varying(255),
@@ -114,8 +118,9 @@ create table wvp_device_mobile_position (
                                             create_time character varying(50)
 );
 
+DROP TABLE IF EXISTS wvp_gb_stream;
 create table wvp_gb_stream (
-                               gb_stream_id serial primary key,
+                               gb_stream_id BIGINT AUTO_INCREMENT primary key,
                                app character varying(255) not null,
                                stream character varying(255) not null,
                                gb_id character varying(50) not null,
@@ -129,8 +134,9 @@ create table wvp_gb_stream (
                                constraint uk_gb_stream_unique_app_stream unique (app, stream)
 );
 
+DROP TABLE IF EXISTS wvp_log;
 create table wvp_log (
-                         id serial primary key ,
+                         id BIGINT AUTO_INCREMENT PRIMARY KEY,
                          name character varying(50),
                          type character varying(50),
                          uri character varying(200),
@@ -141,6 +147,7 @@ create table wvp_log (
                          create_time character varying(50)
 );
 
+DROP TABLE IF EXISTS wvp_media_server;
 create table wvp_media_server (
                                   id character varying(255) primary key ,
                                   ip character varying(50),
@@ -175,8 +182,9 @@ create table wvp_media_server (
                                   constraint uk_media_server_unique_ip_http_port unique (ip, http_port)
 );
 
+DROP TABLE IF EXISTS wvp_platform;
 create table wvp_platform (
-                              id serial primary key ,
+                              id BIGINT AUTO_INCREMENT PRIMARY KEY,
                               enable bool default false,
                               name character varying(255),
                               server_gb_id character varying(50),
@@ -207,6 +215,7 @@ create table wvp_platform (
                               constraint uk_platform_unique_server_gb_id unique (server_gb_id)
 );
 
+DROP TABLE IF EXISTS wvp_platform_catalog;
 create table wvp_platform_catalog (
                                       id character varying(50),
                                       platform_id character varying(50),
@@ -217,24 +226,27 @@ create table wvp_platform_catalog (
                                       constraint uk_platform_catalog_id_platform_id unique (id, platform_id)
 );
 
+DROP TABLE IF EXISTS wvp_platform_gb_channel;
 create table wvp_platform_gb_channel (
-                                         id serial primary key ,
+                                         id BIGINT AUTO_INCREMENT PRIMARY KEY,
                                          platform_id character varying(50),
                                          catalog_id character varying(50),
                                          device_channel_id integer,
                                          constraint uk_platform_gb_channel_platform_id_catalog_id_device_channel_id unique (platform_id, catalog_id, device_channel_id)
 );
 
+DROP TABLE IF EXISTS wvp_platform_gb_stream;
 create table wvp_platform_gb_stream (
-                                        id serial primary key,
+                                        id BIGINT AUTO_INCREMENT PRIMARY KEY,
                                         platform_id character varying(50),
                                         catalog_id character varying(50),
                                         gb_stream_id integer,
                                         constraint uk_platform_gb_stream_platform_id_catalog_id_gb_stream_id unique (platform_id, catalog_id, gb_stream_id)
 );
 
+DROP TABLE IF EXISTS wvp_stream_proxy;
 create table wvp_stream_proxy (
-                                  id serial primary key,
+                                  id BIGINT AUTO_INCREMENT PRIMARY KEY,
                                   type character varying(50),
                                   app character varying(255),
                                   stream character varying(255),
@@ -258,8 +270,9 @@ create table wvp_stream_proxy (
                                   constraint uk_stream_proxy_app_stream unique (app, stream)
 );
 
+DROP TABLE IF EXISTS wvp_stream_push;
 create table wvp_stream_push (
-                                 id serial primary key,
+                                 id BIGINT AUTO_INCREMENT PRIMARY KEY,
                                  app character varying(255),
                                  stream character varying(255),
                                  total_reader_count character varying(50),
@@ -276,8 +289,10 @@ create table wvp_stream_push (
                                  self bool default false,
                                  constraint uk_stream_push_app_stream unique (app, stream)
 );
+
+DROP TABLE IF EXISTS wvp_cloud_record;
 create table wvp_cloud_record (
-                                  id serial primary key,
+                                  id BIGINT AUTO_INCREMENT PRIMARY KEY,
                                   app character varying(255),
                                   stream character varying(255),
                                   call_id character varying(255),
@@ -293,8 +308,9 @@ create table wvp_cloud_record (
                                   constraint uk_stream_push_app_stream_path unique (app, stream, file_path)
 );
 
+DROP TABLE IF EXISTS wvp_user;
 create table wvp_user (
-                          id serial primary key,
+                          id BIGINT AUTO_INCREMENT PRIMARY KEY,
                           username character varying(255),
                           password character varying(255),
                           role_id integer,
@@ -304,15 +320,18 @@ create table wvp_user (
                           constraint uk_user_username unique (username)
 );
 
+DROP TABLE IF EXISTS wvp_user_role;
 create table wvp_user_role (
-                               id serial primary key,
+                               id BIGINT AUTO_INCREMENT PRIMARY KEY,
                                name character varying(50),
                                authority character varying(50),
                                create_time character varying(50),
                                update_time character varying(50)
 );
+
+DROP TABLE IF EXISTS wvp_wvp_resources_treeuser_role;
 create table wvp_resources_tree (
-                                    id serial primary key ,
+                                    id BIGINT AUTO_INCREMENT PRIMARY KEY,
                                     is_catalog bool default true,
                                     device_channel_id integer ,
                                     gb_stream_id integer,
@@ -321,8 +340,9 @@ create table wvp_resources_tree (
                                     path character varying(255)
 );
 
+DROP TABLE IF EXISTS wvp_user_api_key;
 create table wvp_user_api_key (
-                                  id serial primary key ,
+                                  id BIGINT AUTO_INCREMENT PRIMARY KEY,
                                   user_id bigint,
                                   app character varying(255) ,
                                   api_key text,

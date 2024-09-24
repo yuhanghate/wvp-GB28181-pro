@@ -17,13 +17,13 @@ spring:
     # REDIS数据库配置
     redis:
         # [必须修改] Redis服务器IP, REDIS安装在本机的,使用127.0.0.1
-        host: 127.0.0.1
+        host: 172.17.20.12
         # [必须修改] 端口号
         port: 6379
         # [可选] 数据库 DB
         database: 6
         # [可选] 访问密码,若你的redis服务器没有设置密码，就不需要用密码去连接
-        password:
+        password: yuyue123
         # [可选] 超时时间
         timeout: 10000
         # [可选] 一个pool最多可分配多少个jedis实例
@@ -53,9 +53,9 @@ spring:
                 master:
                     type: com.zaxxer.hikari.HikariDataSource
                     driver-class-name: com.mysql.cj.jdbc.Driver
-                    url: jdbc:mysql://127.0.0.1:3306/wvp2?useUnicode=true&characterEncoding=UTF8&rewriteBatchedStatements=true&serverTimezone=PRC&useSSL=false&allowMultiQueries=true
+                    url: jdbc:mysql://172.17.20.12:2881/wvp2?useUnicode=true&characterEncoding=UTF8&rewriteBatchedStatements=true&serverTimezone=PRC&useSSL=false&allowMultiQueries=true
                     username: root
-                    password: root123
+                    password: yuyue123
                     hikari:
                         connection-timeout: 20000             # 是客户端等待连接池连接的最大毫秒数
                         initialSize: 50                       # 连接池初始化连接数
@@ -66,9 +66,9 @@ spring:
                 share:
                     type: com.zaxxer.hikari.HikariDataSource
                     driver-class-name: com.mysql.cj.jdbc.Driver
-                    url: jdbc:mysql://127.0.0.1:3306/wvp269_1?useUnicode=true&characterEncoding=UTF8&rewriteBatchedStatements=true&serverTimezone=PRC&useSSL=false&allowMultiQueries=true&allowPublicKeyRetrieval=true
+                    url: jdbc:mysql://172.17.20.12:3306/wvp269_1?useUnicode=true&characterEncoding=UTF8&rewriteBatchedStatements=true&serverTimezone=PRC&useSSL=false&allowMultiQueries=true&allowPublicKeyRetrieval=true
                     username: root
-                    password: 12345678
+                    password: yuyue123
 
 
 
@@ -103,7 +103,7 @@ sip:
     # 请不要使用127.0.0.1，任何包括localhost在内的域名都是不可以的。
     ip: 0.0.0.0
     # [可选] 没有任何业务需求，仅仅是在前端展示的时候用
-    show-ip: 192.168.0.100
+    show-ip: 172.16.10.107
     # [可选] 28181服务监听的端口
     port: 5060
     # 根据国标6.1.2中规定，domain宜采用ID统一编码的前十位编码。国标附录D中定义前8位为中心编码（由省级、市级、区级、基层编号组成，参照GB/T 2260-2007）
@@ -138,7 +138,7 @@ media:
     # [必须修改] zlm服务器唯一id，用于触发hook时区别是哪台服务器,general.mediaServerId
     id:
     # [必须修改] zlm服务器的内网IP
-    ip: 192.168.0.100
+    ip: 172.17.20.12
     # [可选] 有公网IP就配置公网IP, 不可用域名
     wan_ip:
     # [可选] 返回流地址时的ip，置空使用 media.ip
@@ -146,7 +146,7 @@ media:
     # [可选] wvp在国标信令中使用的ip，此ip为摄像机可以访问到的ip， 置空使用 media.ip
     sdp-ip:
     # [可选] zlm服务器访问WVP所使用的IP, 默认使用127.0.0.1，zlm和wvp没有部署在同一台服务器时必须配置
-    hook-ip: 172.19.128.50
+    hook-ip: 172.16.10.107
     # [必须修改] zlm服务器的http.port
     http-port: 80
     # [可选] zlm服务器的http.sslport, 置空使用zlm配置文件配置
@@ -176,7 +176,7 @@ media:
         # [可选] 在此范围内选择端口用于媒体流传输, 必须提前在zlm上配置该属性，不然自动配置此属性可能不成功
         port-range: 30000,30500 # 端口范围
         # [可选] 国标级联在此范围内选择端口发送媒体流，请不要与收流端口范围重合
-        send-port-range: 50502,50506 # 端口范围
+        send-port-range: 30502,30506 # 端口范围
     # 录像辅助服务， 部署此服务可以实现zlm录像的管理与下载， 0 表示不使用
     record-assist-port: 0
 
