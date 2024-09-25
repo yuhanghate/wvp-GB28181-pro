@@ -2,7 +2,7 @@
 FROM openjdk:11
 ENV name 'wvp-pro'
 ENV active 'dev'
-ADD ${name}*.jar /${name}.jar
+ADD ./${name}*.jar /${name}.jar
 ENV port 18080
 
 EXPOSE 18080/tcp
