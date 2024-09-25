@@ -16,7 +16,7 @@ fi
 # 编译jar包
 mvn clean package
 rm -rf wvp-pro*.jar
-cd target && mv wvp-pro*.jar ../../ && cd ../../
+cd target && cp wvp-pro*.jar ../../ && cd ../../
 
 # 定义应用组名
 group_name='sip'
