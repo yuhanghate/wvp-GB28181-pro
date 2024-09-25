@@ -9,7 +9,7 @@ module.exports = {
 
     // Paths
     assetsSubDirectory: 'static',
-    assetsPublicPath: '/',
+    assetsPublicPath: './',
     proxyTable: {
       '/debug': {
         target: 'http://127.0.0.1:8080',
@@ -61,7 +61,7 @@ module.exports = {
     // Paths
     assetsRoot: path.resolve(__dirname, '../../src/main/resources/static/'),
     assetsSubDirectory: './static',
-    assetsPublicPath: '/',
+    assetsPublicPath: './',
 
     /**
      * Source Maps
