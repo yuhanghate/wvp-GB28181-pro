@@ -24,11 +24,11 @@ public class MediaConfig{
     @Value("${media.id:zlmediakit33021103}")
     private String id;
 
-    @Value("${media.ip}")
+    @Value("${media.ip:172.17.20.12}")
     private String ip;
 
-    @Value("${media.wan_ip:}")
-    private String wanIp;
+//    @Value("${media.wan_ip:}")
+//    private String wanIp;
 
     @Value("${media.hook-ip:127.0.0.1}")
     private String hookIp;
@@ -284,11 +284,11 @@ public class MediaConfig{
         return false;
     }
 
-    public String getWanIp() {
-        return wanIp;
-    }
-
-    public void setWanIp(String wanIp) {
-        this.wanIp = wanIp;
-    }
+//    public String getWanIp() {
+//        return wanIp;
+//    }
+//
+//    public void setWanIp(String wanIp) {
+//        this.wanIp = wanIp;
+//    }
 }
