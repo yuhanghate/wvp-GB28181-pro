@@ -37,12 +37,14 @@ public class ProxyServletConfig {
 
     @Value("${server.port}")
     private int serverPort;
+    @Value("${media.http-port}")
+    private int mediaHttpPort;
 
     @Bean
-    public ServletRegistrationBean zlmServletRegistrationBean(){
-        ServletRegistrationBean servletRegistrationBean = new ServletRegistrationBean(new ZlmProxyServlet(),"/zlm/*");
+    public ServletRegistrationBean zlmServletRegistrationBean() {
+        ServletRegistrationBean servletRegistrationBean = new ServletRegistrationBean(new ZlmProxyServlet(), "/zlm/*");
         servletRegistrationBean.setName("zlm_Proxy");
-        servletRegistrationBean.addInitParameter("targetUri", "http://127.0.0.1:6080");
+        servletRegistrationBean.addInitParameter("targetUri", "http://127.0.0.1:" + mediaHttpPort);
         servletRegistrationBean.addUrlMappings();
         if (logger.isDebugEnabled()) {
             servletRegistrationBean.addInitParameter("log", "true");
@@ -50,7 +52,7 @@ public class ProxyServletConfig {
         return servletRegistrationBean;
     }
 
-    class ZlmProxyServlet extends ProxyServlet{
+    class ZlmProxyServlet extends ProxyServlet {
         @Override
         protected String rewriteQueryStringFromRequest(HttpServletRequest servletRequest, String queryString) {
             String queryStr = super.rewriteQueryStringFromRequest(servletRequest, queryString);
@@ -58,7 +60,7 @@ public class ProxyServletConfig {
             if (mediaInfo != null) {
                 if (!ObjectUtils.isEmpty(queryStr)) {
                     queryStr += "&secret=" + mediaInfo.getSecret();
-                }else {
+                } else {
                     queryStr = "secret=" + mediaInfo.getSecret();
                 }
             }
@@ -71,7 +73,7 @@ public class ProxyServletConfig {
                                          HttpRequest proxyRequest) throws IOException {
             HttpResponse response = super.doExecute(servletRequest, servletResponse, proxyRequest);
             response.removeHeaders("Access-Control-Allow-Origin");
-            response.setHeader("Access-Control-Allow-Credentials","true");
+            response.setHeader("Access-Control-Allow-Credentials", "true");
             response.removeHeaders("Access-Control-Allow-Credentials");
 
             return response;
@@ -81,7 +83,7 @@ public class ProxyServletConfig {
          * 异常处理
          */
         @Override
-        protected void handleRequestException(HttpRequest proxyRequest, HttpResponse proxyResonse, Exception e){
+        protected void handleRequestException(HttpRequest proxyRequest, HttpResponse proxyResonse, Exception e) {
             try {
                 super.handleRequestException(proxyRequest, proxyResonse, e);
             } catch (ServletException servletException) {
@@ -89,10 +91,10 @@ public class ProxyServletConfig {
             } catch (IOException ioException) {
                 if (ioException instanceof ConnectException) {
                     logger.error("zlm 连接失败");
-                }  else {
+                } else {
                     logger.error("zlm 代理失败： ", e);
                 }
-            } catch (RuntimeException exception){
+            } catch (RuntimeException exception) {
                 logger.error("zlm 代理失败： ", e);
             }
         }
@@ -109,8 +111,8 @@ public class ProxyServletConfig {
             if (mediaInfo != null) {
 //                String realRequestURI = requestURI.substring(requestURI.indexOf(mediaInfo.getId())+ mediaInfo.getId().length());
                 uri = String.format("http://%s:%s", mediaInfo.getIp(), mediaInfo.getHttpPort());
-            }else {
-                uri = "http://127.0.0.1:" + serverPort +"/index/hook/null"; // 只是一个能返回404的请求而已， 其他的也可以
+            } else {
+                uri = "http://127.0.0.1:" + serverPort + "/index/hook/null"; // 只是一个能返回404的请求而已， 其他的也可以
             }
             return uri;
         }
@@ -125,7 +127,7 @@ public class ProxyServletConfig {
             HttpHost host;
             if (mediaInfo != null) {
                 host = new HttpHost(mediaInfo.getIp(), mediaInfo.getHttpPort());
-            }else {
+            } else {
                 host = new HttpHost("127.0.0.1", serverPort);
             }
             return host;
@@ -135,12 +137,12 @@ public class ProxyServletConfig {
         /**
          * 根据uri获取流媒体信息
          */
-        MediaServer getMediaInfoByUri(String uri){
+        MediaServer getMediaInfoByUri(String uri) {
             String[] split = uri.split("/");
             String mediaServerId = split[2];
             if ("default".equalsIgnoreCase(mediaServerId)) {
                 return mediaServerService.getDefaultMediaServer();
-            }else {
+            } else {
                 return mediaServerService.getOne(mediaServerId);
             }
         }
@@ -155,7 +157,7 @@ public class ProxyServletConfig {
             String url = super.rewriteUrlFromRequest(servletRequest);
             if (mediaInfo == null) {
                 logger.error("[ZLM服务访问代理]，错误：处理url信息时未找到流媒体信息=>{}", requestURI);
-                return  url;
+                return url;
             }
             if (!ObjectUtils.isEmpty(mediaInfo.getId())) {
                 url = url.replace(mediaInfo.getId() + "/", "");
@@ -165,8 +167,8 @@ public class ProxyServletConfig {
     }
 
     @Bean
-    public ServletRegistrationBean recordServletRegistrationBean(){
-        ServletRegistrationBean servletRegistrationBean = new ServletRegistrationBean(new RecordProxyServlet(),"/record_proxy/*");
+    public ServletRegistrationBean recordServletRegistrationBean() {
+        ServletRegistrationBean servletRegistrationBean = new ServletRegistrationBean(new RecordProxyServlet(), "/record_proxy/*");
         servletRegistrationBean.setName("record_proxy");
         servletRegistrationBean.addInitParameter("targetUri", "http://127.0.0.1:18081");
         servletRegistrationBean.addUrlMappings();
@@ -176,7 +178,7 @@ public class ProxyServletConfig {
         return servletRegistrationBean;
     }
 
-    class RecordProxyServlet extends ProxyServlet{
+    class RecordProxyServlet extends ProxyServlet {
 
         @Override
         protected String rewriteQueryStringFromRequest(HttpServletRequest servletRequest, String queryString) {
@@ -188,7 +190,7 @@ public class ProxyServletConfig {
             String remoteHost = String.format("http://%s:%s", mediaInfo.getStreamIp(), mediaInfo.getRecordAssistPort());
             if (!ObjectUtils.isEmpty(queryStr)) {
                 queryStr += "&remoteHost=" + remoteHost;
-            }else {
+            } else {
                 queryStr = "remoteHost=" + remoteHost;
             }
             return queryStr;
@@ -200,8 +202,8 @@ public class ProxyServletConfig {
                                          HttpRequest proxyRequest) throws IOException {
             HttpResponse response = super.doExecute(servletRequest, servletResponse, proxyRequest);
             String origin = servletRequest.getHeader("origin");
-            response.setHeader("Access-Control-Allow-Origin",origin);
-            response.setHeader("Access-Control-Allow-Credentials","true");
+            response.setHeader("Access-Control-Allow-Origin", origin);
+            response.setHeader("Access-Control-Allow-Credentials", "true");
 
             return response;
         }
@@ -210,7 +212,7 @@ public class ProxyServletConfig {
          * 异常处理
          */
         @Override
-        protected void handleRequestException(HttpRequest proxyRequest, HttpResponse proxyResponse, Exception e){
+        protected void handleRequestException(HttpRequest proxyRequest, HttpResponse proxyResponse, Exception e) {
             try {
                 super.handleRequestException(proxyRequest, proxyResponse, e);
             } catch (ServletException servletException) {
@@ -224,10 +226,10 @@ public class ProxyServletConfig {
 //                     * TODO 暂时去除异常处理。后续使用其他代理框架修改测试
 //                     */
 
-                }else {
+                } else {
                     logger.error("录像服务 代理失败： ", e);
                 }
-            } catch (RuntimeException exception){
+            } catch (RuntimeException exception) {
                 logger.error("录像服务 代理失败： ", e);
             }
         }
@@ -244,8 +246,8 @@ public class ProxyServletConfig {
             if (mediaInfo != null) {
 //                String realRequestURI = requestURI.substring(requestURI.indexOf(mediaInfo.getId())+ mediaInfo.getId().length());
                 uri = String.format("http://%s:%s", mediaInfo.getIp(), mediaInfo.getRecordAssistPort());
-            }else {
-                uri = "http://127.0.0.1:" + serverPort +"/index/hook/null"; // 只是一个能返回404的请求而已， 其他的也可以
+            } else {
+                uri = "http://127.0.0.1:" + serverPort + "/index/hook/null"; // 只是一个能返回404的请求而已， 其他的也可以
             }
             return uri;
         }
@@ -260,7 +262,7 @@ public class ProxyServletConfig {
             HttpHost host;
             if (mediaInfo != null) {
                 host = new HttpHost(mediaInfo.getIp(), mediaInfo.getRecordAssistPort());
-            }else {
+            } else {
                 host = new HttpHost("127.0.0.1", serverPort);
             }
             return host;
@@ -270,12 +272,12 @@ public class ProxyServletConfig {
         /**
          * 根据uri获取流媒体信息
          */
-        MediaServer getMediaInfoByUri(String uri){
+        MediaServer getMediaInfoByUri(String uri) {
             String[] split = uri.split("/");
             String mediaServerId = split[2];
             if ("default".equalsIgnoreCase(mediaServerId)) {
                 return mediaServerService.getDefaultMediaServer();
-            }else {
+            } else {
                 return mediaServerService.getOne(mediaServerId);
             }
 
@@ -291,7 +293,7 @@ public class ProxyServletConfig {
             String url = super.rewriteUrlFromRequest(servletRequest);
             if (mediaInfo == null) {
                 logger.error("[录像服务访问代理]，错误：处理url信息时未找到流媒体信息=>{}", requestURI);
-                return  url;
+                return url;
             }
             if (!ObjectUtils.isEmpty(mediaInfo.getId())) {
                 url = url.replace(mediaInfo.getId() + "/", "");
