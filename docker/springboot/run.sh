@@ -39,7 +39,7 @@ echo '----build 镜像----'
 docker run --restart always --name ${app_name} \
   -e TZ="Asia/Shanghai" \
   -v /etc/localtime:/etc/localtime \
-  -p 18080:8080 \
+  -p 18080:18080 \
   -p 5060:5060 \
   -p 5060:5060/udp \
   -d ${group_name}/${app_name}:${app_version}
