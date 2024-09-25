@@ -81,6 +81,8 @@ media:
   wan_ip:
   # [必须修改] zlm服务器的http.port
   http-port: 8080
+  rtmp-port: 9935
+  rtsp-port: 8554
   # [可选] zlm服务器访问WVP所使用的IP, 默认使用127.0.0.1，zlm和wvp没有部署在同一台服务器时必须配置
   hook-ip: 6.6.6.8
   # [必选选] zlm服务器的hook.admin_params=secret
