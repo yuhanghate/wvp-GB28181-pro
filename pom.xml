@@ -14,7 +14,7 @@
     <version>2.7.3</version>
     <name>web video platform</name>
     <description>国标28181视频平台</description>
-    <packaging>1.0.0</packaging>
+<!--    <packaging>1.0.0</packaging>-->
 
     <repositories>
         <repository>
