@@ -21,7 +21,7 @@ public class MediaConfig{
     private final static Logger logger = LoggerFactory.getLogger(MediaConfig.class);
 
     // 修改必须配置，不再支持自动获取
-    @Value("${media.id}")
+    @Value("${media.id:zlmediakit33021103}")
     private String id;
 
     @Value("${media.ip}")
